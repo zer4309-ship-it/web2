@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad - Big Stones Garden</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="icon" href="Imagen de WhatsApp 2025-11-21 a las 04.53.49_cb58cbea.jpg" type="image/jpg">
+
+    <style>
+        body {
+            background: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            color: #e67e22;
+            margin-top: 20px;
+        }
+
+        .contenedor {
+            width: 90%;
+            max-width: 900px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #aaa;
+        }
+
+        h2 {
+            color: #444;
+            border-bottom: 2px solid #e67e22;
+            padding-bottom: 5px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #e67e22;
+            color: white;
+        }
+
+        .boton {
+            background: #e67e22;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px 10px 0;
+        }
+
+        .boton:hover {
+            background: #cf6d16;
+        }
+
+        .menu-link {
+            margin-top: 20px;
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background: black;
+            color: white;
+            width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .botones-container {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Actividad del Día</h1>
+
+    <div class="contenedor">
+        <!-- PRODUCTOS VENDIDOS -->
+        <h2>Productos Vendidos</h2>
+        <table id="tablaProductos">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="2">TOTAL PRODUCTOS</th>
+                    <th id="totalProductos">$0</th>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- CITAS DEL SPA -->
+        <h2>Citas del SPA</h2>
+        <table id="tablaSpa">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Servicio</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="4">TOTAL SPA</th>
+                    <th id="totalSpa">$0</th>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- BOTONES -->
+        <div class="botones-container">
+            <button class="boton" onclick="mostrarVentaTotal()">Venta Total</button>
+            <button class="boton" onclick="imprimirTicket()">Imprimir Ticket</button>
+            <button class="boton" onclick="reiniciarActividad()">Reiniciar Actividad</button>
+        </div>
+
+        <a class="menu-link" href="index.html">Regresar al menú</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            cargarProductos();
+            cargarSpa();
+        });
+
+        // -------------------------
+        // PRODUCTOS VENDIDOS
+        // -------------------------
+        function cargarProductos() {
+            const ventas = JSON.parse(localStorage.getItem("productosVendidos")) || [];
+            const tabla = document.querySelector("#tablaProductos tbody");
+            tabla.innerHTML = "";
+
+            let totalProductos = 0;
+            ventas.forEach(v => {
+                tabla.innerHTML += `
+                    <tr>
+                        <td>${v.nombre}</td>
+                        <td>${v.cantidad}</td>
+                        <td>$${v.total}</td>
+                    </tr>`;
+                totalProductos += parseFloat(v.total) || 0;
+            });
+
+            document.getElementById("totalProductos").innerText = `$${totalProductos} MXN`;
+        }
+
+        // -------------------------
+        // CITAS DEL SPA
+        // -------------------------
+        function cargarSpa() {
+            const spa = JSON.parse(localStorage.getItem("spaCitas")) || [];
+            const tabla = document.querySelector("#tablaSpa tbody");
+            tabla.innerHTML = "";
+
+            let totalSpa = 0;
+            spa.forEach(s => {
+                tabla.innerHTML += `
+                    <tr>
+                        <td>${s.nombre}</td>
+                        <td>${s.servicio}</td>
+                        <td>${s.fecha}</td>
+                        <td>${s.hora}</td>
+                        <td>$${s.precio}</td>
+                    </tr>`;
+                totalSpa += parseFloat(s.precio) || 0;
+            });
+
+            document.getElementById("totalSpa").innerText = `$${totalSpa} MXN`;
+        }
+
+        // -------------------------
+        // REINICIAR ACTIVIDAD
+        // -------------------------
+        function reiniciarActividad() {
+            if (confirm("¿Seguro que quieres borrar todo el registro?")) {
+                localStorage.removeItem("productosVendidos");
+                localStorage.removeItem("spaCitas");
+                cargarProductos();
+                cargarSpa();
+            }
+        }
+
+        // -------------------------
+        // VENTA TOTAL (PRODUCTOS + SPA)
+        // -------------------------
+        function mostrarVentaTotal() {
+            const totalProductos = parseFloat(document.getElementById("totalProductos").innerText.replace(/\D/g,"")) || 0;
+            const totalSpa = parseFloat(document.getElementById("totalSpa").innerText.replace(/\D/g,"")) || 0;
+            const totalGeneral = totalProductos + totalSpa;
+            alert(`La venta total del día (Productos + SPA) es: $${totalGeneral} MXN`);
+        }
+
+        // -------------------------
+        // IMPRIMIR TICKET
+        // -------------------------
+        function imprimirTicket() {
+            const ventas = JSON.parse(localStorage.getItem("productosVendidos")) || [];
+            const spa = JSON.parse(localStorage.getItem("spaCitas")) || [];
+
+            let totalProductos = 0;
+            let totalSpa = 0;
+
+            let ticket = `<h2>BIG STONES GARDEN - TICKET DEL DÍA</h2>`;
+            
+            ticket += `<h3>Productos Vendidos</h3><ul>`;
+            ventas.forEach(v => {
+                ticket += `<li>${v.cantidad} x ${v.nombre} = $${v.total}</li>`;
+                totalProductos += parseFloat(v.total) || 0;
+            });
+            ticket += `</ul>`;
+            ticket += `<strong>Total Productos: $${totalProductos} MXN</strong>`;
+
+            ticket += `<h3>Citas del SPA</h3><ul>`;
+            spa.forEach(s => {
+                ticket += `<li>${s.nombre} - ${s.servicio} = $${s.precio}</li>`;
+                totalSpa += parseFloat(s.precio) || 0;
+            });
+            ticket += `</ul>`;
+            ticket += `<strong>Total SPA: $${totalSpa} MXN</strong>`;
+
+            const totalGeneral = totalProductos + totalSpa;
+            ticket += `<h3>TOTAL GENERAL: $${totalGeneral} MXN</h3>`;
+
+            const ventana = window.open("", "Ticket", "width=600,height=600");
+            ventana.document.write(ticket);
+            ventana.document.write('<br><button onclick="window.print();">Imprimir</button>');
+        }
+    </script>
+
+</body>
+</html>
+

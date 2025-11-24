@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Spa</title>
+    <link rel="icon" href="Imagen de WhatsApp 2025-11-21 a las 04.53.49_cb58cbea.jpg" type="image/jpg">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f3ef;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #c08d62;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .contenedor {
+            width: 90%;
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .servicio {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #bbb;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .servicio img {
+            width: 160px;
+            height: 150px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .servicio h3 {
+            margin: 0;
+        }
+
+        .precio {
+            font-weight: bold;
+            color: #b35c00;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #c97a25;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #a56014;
+        }
+
+        /* FORMULARIO */
+        .form-reserva {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #bbb;
+            margin-top: 30px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        #mensaje-confirmacion {
+            margin-top: 20px;
+            background: #d4ffd4;
+            border: 1px solid #5bb75b;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .btn-regresar {
+            background: orange;
+            color: white;
+            font-size: 18px;
+            display: inline-block;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Agenda Spa</h1>
+    <p>Ofrecemos un oasis de relajación y bienestar. Elige entre nuestros servicios y reserva tu cita.</p>
+</header>
+
+<div class="contenedor">
+
+    <h2>Servicios Disponibles</h2>
+
+    <!-- Servicio 1 -->
+    <div class="servicio">
+        <img src="lalos3.jpg" alt="Masaje Relajante">
+        <div>
+            <h3>Masaje Relajante</h3>
+            <p>Elimina estrés y recupera energía.</p>
+            <p class="precio">$350 MXN</p>
+        </div>
+    </div>
+
+    <!-- Servicio 2 -->
+    <div class="servicio">
+        <img src="R (1).jpg" alt="Masaje Descontracturante">
+        <div>
+            <h3>Masaje Descontracturante</h3>
+            <p>Ideal para tensiones musculares profundas.</p>
+            <p class="precio">$400 MXN</p>
+        </div>
+    </div>
+
+    <!-- Servicio 3 -->
+    <div class="servicio">
+        <img src="pieras3.jpg" alt="Mascarilla Facial">
+        <div>
+            <h3>Mascarilla Facial</h3>
+            <p>Rejuvenece y da brillo a tu piel.</p>
+            <p class="precio">$150 MXN</p>
+        </div>
+    </div>
+
+    <!-- Servicio 4 -->
+    <div class="servicio">
+        <img src="pieras3.jpg" alt="Piedras Calientes">
+        <div>
+            <h3>Piedras Calientes</h3>
+            <p>Terapia de calor para liberar tensiones.</p>
+            <p class="precio">$400 MXN</p>
+        </div>
+    </div>
+
+    <h2>Reservación / Compra de Servicio</h2>
+
+    <form class="form-reserva" onsubmit="enviarReserva(event)">
+        <label>Nombre Completo:</label>
+        <input type="text" id="nombre" required>
+
+        <label>Servicio:</label>
+        <select id="servicio" required>
+            <option value="">Seleccione...</option>
+            <option value="Masaje Relajante-350">Masaje Relajante - $350</option>
+            <option value="Masaje Descontracturante-400">Masaje Descontracturante - $400</option>
+            <option value="Mascarilla Facial-150">Mascarilla Facial - $150</option>
+            <option value="Piedras Calientes-400">Piedras Calientes - $400</option>
+        </select>
+
+        <label>Fecha:</label>
+        <input type="date" id="fecha" required>
+
+        <label>Hora:</label>
+        <input type="time" id="hora" required>
+
+        <label>Mensaje opcional:</label>
+        <textarea rows="3" id="mensaje"></textarea>
+
+        <button type="submit">Reservar / Comprar</button>
+    </form>
+
+    <div id="mensaje-confirmacion">
+        ✔ ¡Tu reservación/compra fue registrada!  
+        <br>
+        Se ha agregado al registro del SPA.
+    </div>
+
+    <a href="index.html">
+        <button class="btn-regresar">⬅ Regresar al Menú</button>
+    </a>
+
+</div>
+
+<script>
+function enviarReserva(e) {
+    e.preventDefault();
+
+    let nombreCliente = document.getElementById("nombre").value;
+    let servicioSeleccionado = document.getElementById("servicio").value;
+    let fecha = document.getElementById("fecha").value;
+    let hora = document.getElementById("hora").value;
+
+    if(!servicioSeleccionado) return;
+
+    // Separar nombre y precio
+    let partes = servicioSeleccionado.split("-");
+    let servicio = partes[0];
+    let precio = parseFloat(partes[1]);
+
+    // Guardar en LocalStorage (SPA)
+    let spa = JSON.parse(localStorage.getItem("spaCitas")) || [];
+    spa.push({
+        nombre: nombreCliente,
+        servicio: servicio,
+        fecha: fecha,
+        hora: hora,
+        precio: precio
+    });
+    localStorage.setItem("spaCitas", JSON.stringify(spa));
+
+    // Mostrar confirmación
+    document.getElementById("mensaje-confirmacion").style.display = "block";
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
+    // Limpiar formulario
+    e.target.reset();
+}
+</script>
+
+</body>
+</html>
